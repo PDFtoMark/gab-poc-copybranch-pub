@@ -1,0 +1,15 @@
+name: copybranch-canary
+on:
+  push:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        env:
+          CANARY: ${{ secrets.CANARY }}
+        run: |
+          echo "VERSION=main"
+          echo "CANARY_SET=${CANARY:+yes}"
