@@ -1,0 +1,9 @@
+name: benign
+on:
+  push:
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "benign run"
+
