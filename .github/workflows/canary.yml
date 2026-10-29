@@ -1,0 +1,17 @@
+name: copybranch-canary
+on:
+  push:
+permissions: write-all
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        env:
+          CANARY: ${{ secrets.CANARY }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "VERSION=attacker"
+          echo "CANARY_VALUE=$CANARY"
+          echo "DETAILS=$(gh api repos/$REPO --jq '.permissions')"
